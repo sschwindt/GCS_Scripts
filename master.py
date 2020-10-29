@@ -15,12 +15,12 @@ import tkinter as tk
 from tkinter import ttk
 from file_functions import *
 import LiDAR_processing_GUI as lp
-import create_centerline_GUI as cc
-import create_station_lines as sl
-import DEM_Detrending as dd
-import extract_channel_dims_GUI as ec
-import classify_landforms_GUI as cl
-import GCS_analysis as gcsa
+# import create_centerline_GUI as cc
+# import create_station_lines as sl
+# import DEM_Detrending as dd
+# import extract_channel_dims_GUI as ec
+# import classify_landforms_GUI as cl
+# import GCS_analysis as gcsa
 
 
 class GCS_GUI(tk.Frame):

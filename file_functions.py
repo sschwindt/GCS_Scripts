@@ -3,15 +3,12 @@ import pandas as pd
 import numpy as np
 import scipy.stats as stats
 import itertools
-from Tkinter import *
-from tkMessageBox import showerror
-import tkFileDialog
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import filedialog
 import subprocess
 import logging
-import arcpy
 
-arcpy.env.overwriteOutput = True
-arcpy.CheckOutExtension('Spatial')
 
 logger = logging.getLogger(__name__)
 
@@ -48,22 +45,22 @@ def cmd(command):
 def browse(root, entry, select='file', ftypes=[('All files', '*')]):
     """GUI button command: opens browser window and adds selected file/folder to entry"""
     if select == 'file':
-        filename = tkFileDialog.askopenfilename(parent=root, title='Choose a file', filetypes=ftypes)
-        if filename != None:
-            entry.delete(0, END)
-            entry.insert(END, filename)
+        filename = filedialog.askopenfilename(parent=root, title='Choose a file', filetypes=ftypes)
+        if filename:
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, filename)
 
     elif select == 'files':
-        files = tkFileDialog.askopenfilenames(parent=root, title='Choose files', filetypes=ftypes)
+        files = filedialog.askopenfilenames(parent=root, title='Choose files', filetypes=ftypes)
         l = root.tk.splitlist(files)
-        entry.delete(0, END)
-        entry.insert(END, l)
+        entry.delete(0, tk.END)
+        entry.insert(tk.END, l)
 
     elif select == 'folder':
-        dirname = tkFileDialog.askdirectory(parent=root, initialdir=entry.get(), title='Choose a directory')
+        dirname = filedialog.askdirectory(parent=root, initialdir=entry.get(), title='Choose a directory')
         if len(dirname) > 0:
-            entry.delete(0, END)
-            entry.insert(END, dirname + '/')
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, dirname + '/')
 
 
 # wrapper to show error message when a command fails
@@ -71,17 +68,11 @@ def err_info(func):
     def wrapper(*args, **kwargs):
         try:
             func(*args, **kwargs)
-        except Exception, e:
+        except Exception as e:
             logger.info(e)
-            showerror('Error', e)
+            messagebox.showerror('Error', e)
     return wrapper
 
-def spatial_license(func):
-    def wrapper(*args, **kwargs):
-        arcpy.CheckOutExtension('Spatial')
-        func(*args, **kwargs)
-        arcpy.CheckInExtension('Spatial')
-    return wrapper
 
 def check_use(filepath):
     """Checks if a file or list of files is in use by another process
@@ -116,7 +107,7 @@ def check_use(filepath):
 
 
 def get_all_files(dir, prefix='',suffix='', nesting=True):
-    '''
+    """
     Returns list of all files in directory
 
     Args:
@@ -124,7 +115,7 @@ def get_all_files(dir, prefix='',suffix='', nesting=True):
         prefix (str): if provided, files returned must start with this
         suffix (str): if provided, files returned must end with this
         nesting (bool): if True, looks in all subdirectories of dir. If false, only looks at top-level.
-    '''
+    """
     l = []
     for path, subdirs, files in os.walk(dir):
         for name in files:
@@ -137,7 +128,7 @@ def split_list(l, break_pts):
     """returns list l split up into sublists at break point indices"""
     l_0 = len(l)
     sl = []
-    if break_pts == []:
+    if break_pts is []:
         return [l]
     else:
         for brk in break_pts:
@@ -165,33 +156,18 @@ class DF(pd.DataFrame):
         self.title = title
 
     def show(self):
-        if self.title != None:
+        if self.title:
             print(self.title)
-        print(self)
 
 
 def ft(x, y):
-    '''Returns the fourier transform magnitude of the x,y data'''
+    """Returns the fourier transform magnitude of the x,y data"""
     n = len(x)
     spacing = abs(x[1]-x[0])
     xf = np.linspace(0, 1/(2.0*spacing), n//2)
     yf = np.fft.fft(y)
     yf = list(map(lambda k: 2.0/n*np.abs(k), yf))[:n//2]
     return xf, yf
-
-
-def flt_to_poly(flt):
-    """Converts .flt raster to a single polygon covering area that is not null"""
-    ras = arcpy.Raster(flt)
-    # make integer raster
-    int_raster = arcpy.sa.Con(arcpy.sa.IsNull(ras) == False, 1)
-    # convert to polygon
-    poly = arcpy.RasterToPolygon_conversion(int_raster,
-                                            flt.replace('.flt', '.shp'),
-                                            'NO_SIMPLIFY'
-                                            )
-
-    return poly.getOutput(0)
 
 
 def white_noise_confidence_interval(n):
@@ -224,9 +200,9 @@ def r_confidence_interval(r, n, alpha=0.05):
 
 
 def cox_acorr(series, maxlags=''):
-    '''
+    """
     Returns two lists: lags and autocorrelation, using Cox variant 3 of ACF
-    '''
+    """
     n = len(series)
     if maxlags == '':
         maxlags = int(n/2)
@@ -247,7 +223,7 @@ def cox_acorr(series, maxlags=''):
 
 
 def ar1_acorr(series, maxlags=''):
-    '''Returns lag, autocorrelation, and confidence interval using geometric autocorrelation for AR1 fit of series'''
+    """Returns lag, autocorrelation, and confidence interval using geometric autocorrelation for AR1 fit of series"""
     n = len(series)
     if maxlags == '':
         maxlags = int(n/2)
@@ -261,7 +237,7 @@ def ar1_acorr(series, maxlags=''):
 
 
 def white_noise_acf_ci(series, maxlags=''):
-    '''Returns the 95% confidence interval for white noise ACF'''
+    """Returns the 95% confidence interval for white noise ACF"""
     n = len(series)
     if maxlags == '':
         maxlags = int(n/2)
