@@ -29,7 +29,7 @@ autodoc_mock_imports = ["numpy", "scipy", "tkinter", "pandas"]
 import sphinx_rtd_theme
 from sphinx.locale import _
 
-project = u'geo-utils'
+project = u'las4windows'
 slug = re.sub(r'\W+', '-', project.lower())
 version = '0.0.2'
 release = '0.0.2'
@@ -63,7 +63,7 @@ intersphinx_mapping = {
     'sphinx': ('http://www.sphinx-doc.org/en/stable/', None),
 }
 
-html_theme = 'sphinx_'
+html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
     'logo_only': True,
     'navigation_depth': 5,
@@ -105,7 +105,7 @@ if not 'READTHEDOCS' in os.environ:
 
 html_logo = os.path.abspath('..') + '/docs/img/icon.svg'
 html_show_sourcelink = True
-htmlhelp_basename = 'Geo-Utils'
+htmlhelp_basename = 'las4windows'
 
 
 latex_documents = [
