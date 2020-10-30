@@ -2,6 +2,8 @@
 
 This fork contains tweaked codes originally designed for *Python2* and the commercial ``arcpy`` library. The tweaked codes are tested with Python 3.8 and work without ``arcpy``.
 
+Because LASTools is proprietary, its executables can hardly be installed on Linux or other UNIX-based systems. That means, the GCS_Toolkit is a *Windows*-only toolkit.
+
 # ORIGINAL README (slight modifications apply)
 
 > This repository contains a set of tools for processing geospatial data. While some tools may have a variety of fluvial geomorphological applications, an emphasis is placed on analysis of [geomorphic covariance structures](http://pasternack.ucdavis.edu/research/projects/geomorphic-covariance-structures/) (GCS). To launch the entire toolkit, run `master.py`. Otherwise, there is an individual GUI included for each tool.
