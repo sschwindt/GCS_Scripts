@@ -471,7 +471,7 @@ def process_lidar(lastoolsdir,
 
     logging.info('OK')
 
-    if (ground_poly) == '' and (keep_orig_pts == False):
+    if ground_poly == '' and (keep_orig_pts == False):
         ground_results = podir + '/' + '02-Ground' + '/'
         veg_results = podir + '/' + '05-Vegetation' + '/'
 
@@ -643,7 +643,7 @@ if __name__ == '__main__':
     L1 = tk.Label(root, text='LAStools /bin/ directory:')
     L1.grid(sticky=tk.E, row=0, column=1)
     E1 = tk.Entry(root, bd=5)
-    E1.insert(tk.END, '/'.join(sys.path[0].split('\\')[:-1]) + '/')
+    E1.insert(tk.END, 'C:\\LAStools\\bin\\')
     E1.grid(row=0, column=2)
     b1 = tk.Button(root, text='Browse', command=lambda: browse(root, E1, select='folder'))
     b1.grid(sticky=tk.W, row=0, column=3)
@@ -651,7 +651,7 @@ if __name__ == '__main__':
     L2 = tk.Label(root, text='LiDAR data directory:')
     L2.grid(sticky=tk.E, row=1, column=1)
     E2 = tk.Entry(root, bd=5)
-    E2.insert(tk.END, '/'.join(sys.path[0].split('\\')[:-1]) + '/')
+    E2.insert(tk.END, sys.path[0])
     E2.grid(row=1, column=2)
     b2 = tk.Button(root, text='Browse', command=lambda: browse(root, E2, select='folder'))
     b2.grid(sticky=tk.W, row=1, column=3)
@@ -677,11 +677,7 @@ if __name__ == '__main__':
                 widget.config(state='normal')
     shp_var.trace('w', trace_choice)
 
-
-
-
     # specify lasground_new parameters
-
     root.grid_rowconfigure(5, minsize=80)
 
     LC1 = tk.Label(root, text='standard/coarse classification parameters:')
